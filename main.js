@@ -30,7 +30,6 @@ client.on('message', msg => {
       if(msg.content.indexOf('https://twitter.com') != -1 ){
         get_urllist(msg.content).forEach(function(item){
           item = item.slice(item.indexOf('status/')).replace('status/', '').replace('?s=19', '');
-          console.log(item);
 
           twclient.get('statuses/show.json?id=' + item, function(err,tw,res){
             let pic_no = 0;
@@ -46,14 +45,18 @@ client.on('message', msg => {
                 req({method: 'GET', url: pic_url, encoding: null},function(err,res,body){
                   if(!err && res.statusCode === 200){
                     if(tw['extended_entities']["media"]["length"] != 1){
-                      let path = 'img/' + tw["id_str"];
+                      let path = 'img/' + msg.channel.id + '/' + tw["id_str"];
                       if(fs.existsSync(path) == false){
                         fs.mkdirSync(path);
                       }
-                      fs.writeFileSync('img/' + tw["id_str"] + '/' + pic_name, body, 'binary');
+                      fs.writeFileSync(path + '/' + pic_name, body, 'binary');
                     }
                     else {
-                      fs.writeFileSync('img/' + pic_name, body, 'binary');
+                      let path = 'img/' + msg.channel.id
+                      if(fs.existsSync(path) == false){
+                        fs.mkdirSync(path);
+                      }
+                      fs.writeFileSync(path + pic_name, body, 'binary');
                     }
                   }
                 })
