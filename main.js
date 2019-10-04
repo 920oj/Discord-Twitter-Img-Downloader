@@ -27,7 +27,6 @@ client.on('message', msg => {
 
   if(msg.author.bot === false){
     if (msg.channel.id === '629113306325712917' || msg.channel.id === '629112113302077459'){
-      console.log('メッセージが投稿されました。');
       if(msg.content.indexOf('https://twitter.com') != -1 ){
         get_urllist(msg.content).forEach(function(item){
           item = item.slice(item.indexOf('status/')).replace('status/', '').replace('?s=19', '');
