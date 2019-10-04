@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const Twitter = require('twitter');
 const req = require('request');
 const fs = require('fs');
+const fsx = require('fs-extra');
 const settings = require('./settings.json');
 
 const client = new Discord.Client();
@@ -40,23 +41,23 @@ client.on('message', msg => {
               tw['extended_entities']["media"].forEach(function(i){
                 pic_no += 1;
                 let pic_name = tw["id_str"] + '_' + pic_no + '.png';
-                let pic_url = i["media_url_https"];
+                let pic_url = i["media_url_https"] + ':orig';
   
                 req({method: 'GET', url: pic_url, encoding: null},function(err,res,body){
                   if(!err && res.statusCode === 200){
                     if(tw['extended_entities']["media"]["length"] != 1){
                       let path = 'img/' + msg.channel.id + '/' + tw["id_str"];
                       if(fs.existsSync(path) == false){
-                        fs.mkdirSync(path);
+                        fsx.mkdirsSync(path);
                       }
                       fs.writeFileSync(path + '/' + pic_name, body, 'binary');
                     }
                     else {
                       let path = 'img/' + msg.channel.id
                       if(fs.existsSync(path) == false){
-                        fs.mkdirSync(path);
+                        fsx.mkdirsSync(path);
                       }
-                      fs.writeFileSync(path + pic_name, body, 'binary');
+                      fs.writeFileSync(path + '/' + pic_name, body, 'binary');
                     }
                   }
                 })

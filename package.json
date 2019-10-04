@@ -18,6 +18,7 @@
   "homepage": "https://github.com/920oj/Discord-Twitter-Img-Downloader#readme",
   "dependencies": {
     "discord.js": "^11.5.1",
+    "fs-extra": "^8.1.0",
     "twitter": "^1.7.1"
   }
 }
